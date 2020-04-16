@@ -1,0 +1,27 @@
+name: CI
+on: [push, pull_request]
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest]
+    runs-on: ${{matrix.os}}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Tests
+        run: swift test --enable-code-coverage
+      - name: codecov
+        run: |
+          os=$(echo "${{ matrix.os }}" | cut -f1 -d"-")
+
+          if [ "$os" = "ubuntu" ]; then
+            sudo ln -s /usr/lib/llvm-9/bin/llvm-cov /usr/local/bin/llvm-cov
+            object=".build/debug/ComposePackageTests.xctest"
+          elif [ "$os" = "macos" ]; then
+            sudo ln -s /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/llvm-cov /usr/local/bin/llvm-cov
+            object=".build/debug/ComposePackageTests.xctest/Contents/MacOS/ComposePackageTests"    
+          fi
+
+          llvm-cov export -format="lcov" --object "$object" -instr-profile .build/debug/codecov/default.profdata > info.lcov
+          bash <(curl https://codecov.io/bash) -cF "$os"
