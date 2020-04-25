@@ -3,7 +3,14 @@ import Foundation
 import Compose
 
 final class ComposeTests: XCTestCase {
-    func testGetSet() {
+    func testGet() {
+        XCTAssertEqual(remoteDeveloper.name, "Andres")
+        XCTAssertEqual(remoteDeveloper.age, 26)
+        XCTAssertEqual(remoteDeveloper.country, "Spain")
+        XCTAssertEqual(remoteDeveloper.city, "Madrid")
+    }
+
+    func testSet() {
         let expectedName = "Kike"
         let expectedCity = "Segovia"
 

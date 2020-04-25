@@ -18,8 +18,10 @@ extension ComposeTests {
     static let __allTests__ComposeTests = [
         ("testCodable", testCodable),
         ("testEquatable", testEquatable),
-        ("testGetSet", testGetSet),
+        ("testGet", testGet),
         ("testHashable", testHashable),
+        ("testLocalizedError", testLocalizedError),
+        ("testSet", testSet),
     ]
 }
 

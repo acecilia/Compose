@@ -3,11 +3,11 @@ import Compose
 
 struct Developer: Codable, Hashable {
     var name: String
-    var age: Int
+    let age: Int
 }
 
 struct RemoteLocation: Codable, Hashable {
-    var country: String
+    let country: String
     var city: String
 }
 

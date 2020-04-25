@@ -15,6 +15,14 @@ public struct Compose<Element1, Element2> {
         set { element2[keyPath: keyPath] = newValue }
     }
 
+    public subscript<T>(dynamicMember keyPath: KeyPath<Element1, T>) -> T {
+        element1[keyPath: keyPath]
+    }
+
+    public subscript<T>(dynamicMember keyPath: KeyPath<Element2, T>) -> T {
+        element2[keyPath: keyPath]
+    }
+
     public init(_ element1: Element1, _ element2: Element2) {
         self.element1 = element1
         self.element2 = element2
