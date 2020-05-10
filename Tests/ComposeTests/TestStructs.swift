@@ -43,3 +43,23 @@ enum DatabaseError: String, LocalizedError {
 typealias AppError = Compose<NetworkError, DatabaseError>
 
 let appError = AppError(.noInternet, .elementNotFound)
+
+// MARK: Struct with shared properties
+
+struct StructWithSharedPropertyA: Codable, Hashable {
+    var sharedProperty: Int
+}
+
+struct StructWithSharedPropertyB: Codable, Hashable {
+    var sharedProperty: String
+}
+
+struct StructWithSharedPropertyC: Codable, Hashable {
+    var sharedProperty: String
+}
+
+typealias DifferentTypeSharedProperty = Compose<StructWithSharedPropertyA, StructWithSharedPropertyB>
+let differentTypeSharedProperty = DifferentTypeSharedProperty(.init(sharedProperty: 26), .init(sharedProperty: "Gonzalo"))
+
+typealias SameTypeSharedProperty = Compose<StructWithSharedPropertyB, StructWithSharedPropertyC>
+let sameTypeSharedProperty = SameTypeSharedProperty(.init(sharedProperty: "Andres"), .init(sharedProperty: "Kike"))

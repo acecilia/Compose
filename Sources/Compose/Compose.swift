@@ -33,8 +33,10 @@ public struct Compose<Element1, Element2> {
 
 extension Compose: Encodable where Element1: Encodable, Element2: Encodable {
     public func encode(to encoder: Encoder) throws {
-        try element1.encode(to: encoder)
+        // Here, if element1 has any property with the same name as element2, element1 property will prevail
+        // because it will override the property from element2
         try element2.encode(to: encoder)
+        try element1.encode(to: encoder)
     }
 }
 

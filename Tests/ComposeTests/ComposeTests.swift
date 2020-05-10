@@ -60,11 +60,11 @@ final class ComposeTests: XCTestCase {
         """
 
         let decoder = JSONDecoder()
-        let remoteDeveloper = try decoder.decode(RemoteDeveloper.self, from: Data(remoteDeveloperJson.utf8))
+        let decoded = try decoder.decode(RemoteDeveloper.self, from: Data(remoteDeveloperJson.utf8))
 
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-        let data = try encoder.encode(remoteDeveloper)
+        let data = try encoder.encode(decoded)
 
         XCTAssertEqual(remoteDeveloperJson, String(data: data, encoding: .utf8))
     }
