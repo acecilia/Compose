@@ -2,30 +2,34 @@ import Foundation
 
 @dynamicMemberLookup
 public struct Compose<Element1, Element2> {
-    public var element1: Element1
-    public var element2: Element2
+    /// The first element of the composition. In most cases you should not use this property, and
+    /// instead, in order to access the child properties you better use the dynamicMember subscript
+    public var _element1: Element1
+    /// The second element of the composition. In most cases you should not use this property, and
+    /// instead, in order to access the child properties you better use the dynamicMember subscript
+    public var _element2: Element2
 
     public subscript<T>(dynamicMember keyPath: WritableKeyPath<Element1, T>) -> T {
-        get { element1[keyPath: keyPath] }
-        set { element1[keyPath: keyPath] = newValue }
+        get { _element1[keyPath: keyPath] }
+        set { _element1[keyPath: keyPath] = newValue }
     }
 
     public subscript<T>(dynamicMember keyPath: WritableKeyPath<Element2, T>) -> T {
-        get { element2[keyPath: keyPath] }
-        set { element2[keyPath: keyPath] = newValue }
+        get { _element2[keyPath: keyPath] }
+        set { _element2[keyPath: keyPath] = newValue }
     }
 
     public subscript<T>(dynamicMember keyPath: KeyPath<Element1, T>) -> T {
-        element1[keyPath: keyPath]
+        _element1[keyPath: keyPath]
     }
 
     public subscript<T>(dynamicMember keyPath: KeyPath<Element2, T>) -> T {
-        element2[keyPath: keyPath]
+        _element2[keyPath: keyPath]
     }
 
-    public init(_ element1: Element1, _ element2: Element2) {
-        self.element1 = element1
-        self.element2 = element2
+    public init(_ _element1: Element1, _ _element2: Element2) {
+        self._element1 = _element1
+        self._element2 = _element2
     }
 }
 
@@ -35,15 +39,15 @@ extension Compose: Encodable where Element1: Encodable, Element2: Encodable {
     public func encode(to encoder: Encoder) throws {
         // Here, if element1 has any property with the same name as element2, element1 property will prevail
         // because it will override the property from element2
-        try element2.encode(to: encoder)
-        try element1.encode(to: encoder)
+        try _element2.encode(to: encoder)
+        try _element1.encode(to: encoder)
     }
 }
 
 extension Compose: Decodable where Element1: Decodable, Element2: Decodable {
     public init(from decoder: Decoder) throws {
-        self.element1 = try Element1(from: decoder)
-        self.element2 = try Element2(from: decoder)
+        self._element1 = try Element1(from: decoder)
+        self._element2 = try Element2(from: decoder)
     }
 }
 
@@ -55,16 +59,16 @@ extension Compose: Error where Element1: Error, Element2: Error { }
 
 extension Compose: LocalizedError where Element1: LocalizedError, Element2: LocalizedError {
     public var errorDescription: String? {
-        [element1.errorDescription, element2.errorDescription].filterAndJoin()
+        [_element1.errorDescription, _element2.errorDescription].filterAndJoin()
     }
     public var failureReason: String? {
-        [element1.failureReason, element2.failureReason].filterAndJoin()
+        [_element1.failureReason, _element2.failureReason].filterAndJoin()
     }
     public var recoverySuggestion: String? {
-        [element1.recoverySuggestion, element2.recoverySuggestion].filterAndJoin()
+        [_element1.recoverySuggestion, _element2.recoverySuggestion].filterAndJoin()
     }
     public var helpAnchor: String? {
-        [element1.helpAnchor, element2.helpAnchor].filterAndJoin()
+        [_element1.helpAnchor, _element2.helpAnchor].filterAndJoin()
     }
 }
 
